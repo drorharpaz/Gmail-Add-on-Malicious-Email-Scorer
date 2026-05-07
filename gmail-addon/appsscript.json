@@ -1,0 +1,26 @@
+{
+  "timeZone": "Asia/Jerusalem",
+  "dependencies": {
+  },  
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/gmail.modify"
+  ],
+  "addOns": {
+    "common": {
+      "name": "Gmail Security Shield",
+      "logoUrl": "https://www.gstatic.com/images/icons/material/system/1x/security_black_20dp.png",
+      "useLocaleFromApp": true
+    },
+    "gmail": {
+      "contextualTriggers": [{
+        "unconditional": {},
+        "onTriggerFunction": "onGmailMessageOpen"
+      }]
+    }
+  }
+}
