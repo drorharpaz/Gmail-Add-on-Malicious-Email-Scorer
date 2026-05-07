@@ -43,7 +43,7 @@ function getAnalysisFromBackend(messageId) {
   };
 
   // NEEDS TO REPLACE THIS URL with actual Google Cloud Run URL later
-  const url = "https://YOUR-BACKEND-URL.ngrok-free.app/analyze"; 
+  const url = "https://upwind-security-service-1096141268910.me-west1.run.app/analyze"; 
 
   const options = {
     "method": "post",
