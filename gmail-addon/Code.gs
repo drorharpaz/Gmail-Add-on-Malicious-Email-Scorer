@@ -1,3 +1,7 @@
+// ---------- Gmail Add-on: Security Analysis Code ---------- //
+// This script defines the main logic for a Gmail Add-on that analyzes
+// email content for potential security threats using a remote backend service.
+
 /**
  * Main entry point for the Gmail Add-on. 
  * Triggered when a user opens an email.
