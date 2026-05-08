@@ -1,0 +1,6 @@
+# --- Tests requirements file ---
+# This file lists the dependencies for running tests in the 'tests' directory.
+# It is used by pip to install the required packages for testing.
+
+pytest==8.0.0
+pytest-mock==3.12.0

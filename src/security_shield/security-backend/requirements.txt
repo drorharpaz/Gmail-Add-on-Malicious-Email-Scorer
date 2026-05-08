@@ -1,0 +1,7 @@
+# --- Backend requirements file ---
+# This file lists the dependencies for the security backend application.
+# It is used by pip to install the required packages.
+
+flask==3.0.0
+gunicorn==21.2.0
+python-dotenv==1.0.1
