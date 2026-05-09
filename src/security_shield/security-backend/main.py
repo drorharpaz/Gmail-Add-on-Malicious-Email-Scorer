@@ -4,9 +4,16 @@
 
 from flask import Flask, request, jsonify
 from engine import SecurityEngine
-# Note: We will import specific checks here once created (e.g., from checks import IPCheck)
 
 app = Flask(__name__)
+
+@app.after_request
+def apply_hsts(response):
+    """Apply HTTP Strict Transport Security (HSTS) headers to all responses.
+    This ensures that browsers only connect to the server over HTTPS, enhancing security."""
+    
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+    return response
 
 # Initialize the Security Engine
 security_engine = SecurityEngine()
