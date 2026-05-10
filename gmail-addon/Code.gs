@@ -2,6 +2,9 @@
 // This script defines the main logic for a Gmail Add-on that analyzes
 // email content for potential security threats using a remote backend service.
 
+// The base URL of the backend service
+var BACKEND_BASE_URL = "https://upwind-security-service-1096141268910.me-west1.run.app";
+
 /**
  * Main entry point for the Gmail Add-on. 
  * Triggered when a user opens an email.
@@ -48,7 +51,7 @@ function getAnalysisFromBackend(messageId) {
   };
 
   // Use the public URL of deployed backend service
-  const url = "https://upwind-security-service-1096141268910.me-west1.run.app/analyze"; 
+  const url = BACKEND_BASE_URL + "/analyze"; 
 
   const options = {
     "method": "post",

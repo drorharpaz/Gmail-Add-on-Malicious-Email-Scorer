@@ -3,7 +3,7 @@ import os
 import io
 import csv
 from dotenv import load_dotenv
-from security_shield.base_check import BaseCheck
+from security_shield.backend.base_check import BaseCheck
 
 # Load environment variables from .env file
 load_dotenv()

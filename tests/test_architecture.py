@@ -4,8 +4,8 @@
 # and that all checks adhere to the expected structure defined by the BaseCheck class.
 
 import pytest
-from security_shield.engine import SecurityEngine
-from security_shield.base_check import BaseCheck
+from security_shield.backend.engine import SecurityEngine
+from security_shield.backend.base_check import BaseCheck
 
 @pytest.fixture
 def engine():

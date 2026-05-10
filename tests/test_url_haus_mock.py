@@ -6,7 +6,7 @@
 import pytest
 import os
 from dotenv import load_dotenv
-from security_shield.engine import SecurityEngine
+from security_shield.backend.engine import SecurityEngine
 
 """
 This test validates the URLHausCheck logic WITHOUT making real internet requests.
