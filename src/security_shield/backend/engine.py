@@ -18,15 +18,19 @@ class SecurityEngine:
 
     def _manual_register_fallback(self):
         """If dynamic discovery loads nothing, register known checks explicitly."""
-        print("[!] Manual registration fallback: importing DomainSpoofingCheck and URLHausCheck.")
+        print(
+            "[!] Manual registration fallback: importing DomainSpoofingCheck, "
+            "URLHausCheck, and LinkMismatchCheck."
+        )
         try:
             from security_shield.checks.domain_spoofing_check import DomainSpoofingCheck
             from security_shield.checks.url_haus_check import URLHausCheck
+            from security_shield.checks.link_mismatch_check import LinkMismatchCheck
         except ImportError as e:
             print(f"[!] Fallback import failed: {e}")
             return
 
-        for cls in (DomainSpoofingCheck, URLHausCheck):
+        for cls in (DomainSpoofingCheck, URLHausCheck, LinkMismatchCheck):
             try:
                 inst = cls()
                 if inst.is_active:
