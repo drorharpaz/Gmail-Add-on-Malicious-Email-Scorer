@@ -10,3 +10,6 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Local interview prep (keep your own copy; not tracked)
+TECHNICAL_EXPLAINER.md
