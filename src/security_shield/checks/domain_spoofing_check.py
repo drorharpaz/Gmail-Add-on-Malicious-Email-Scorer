@@ -2,7 +2,7 @@
 # This file implements the DomainSpoofingCheck class, which detects attempts to spoof
 # high-profile brand names in the sender's display name while using an unrelated email domain.
 
-from security_shield.base_check import BaseCheck
+from security_shield.backend.base_check import BaseCheck
 
 class DomainSpoofingCheck(BaseCheck):
     """

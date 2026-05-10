@@ -4,8 +4,8 @@
 # The tests cover various scenarios, including clear spoofing attempts, suspicious cases, and legitimate emails
 
 import pytest
-from security_shield.engine import SecurityEngine
-from security_shield.base_check import BaseCheck
+from security_shield.backend.engine import SecurityEngine
+from security_shield.backend.base_check import BaseCheck
 
 @pytest.fixture
 def engine():

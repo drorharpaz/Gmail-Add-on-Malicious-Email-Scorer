@@ -5,7 +5,7 @@
 # DO NOT CLICK ON THEM! Copy only the text and use it in the test data.
 
 import pytest
-from security_shield.engine import SecurityEngine
+from security_shield.backend.engine import SecurityEngine
 
 """
 INSTRUCTIONS FOR TESTING:
