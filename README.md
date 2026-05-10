@@ -178,4 +178,3 @@ Dockerfile          # Cloud Run container
 ```
 
 ---
->>>>>>> 229fb24 (Docs: Update README and finalize v1.0)

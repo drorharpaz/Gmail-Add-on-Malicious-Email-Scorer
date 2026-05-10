@@ -119,10 +119,10 @@ function buildSecurityCard(result, messageId) {
       
       const deleteAction = CardService.newAction()
           .setFunctionName('deleteEmailAction')
-          .setParameters({id: messageId});
+          .setParameters({ messageId: String(messageId) });
           
       section.addWidget(CardService.newTextButton()
-          .setText("DELETE PERMANENTLY")
+          .setText("MOVE TO TRASH")
           .setBackgroundColor("#c0392b")
           .setOnClickAction(deleteAction));
       break;
@@ -132,7 +132,7 @@ function buildSecurityCard(result, messageId) {
   return [CardService.newCardBuilder()
       .setHeader(CardService.newCardHeader()
           .setTitle("Gmail Security Shield")
-          .setSubtitle("AI-Powered Threat Analysis"))
+          .setSubtitle("Security Threat Analysis"))
       .addSection(section)
       .build()];
 }
@@ -152,4 +152,46 @@ function createErrorCard() {
       .setHeader(CardService.newCardHeader().setTitle("Gmail Security Shield"))
       .addSection(section)
       .build()];
+}
+
+/**
+ * Moves the current message to Trash (requires gmail.modify scope).
+ * Parameters must match buildSecurityCard: setParameters({ messageId: ... }).
+ * @param {Object} e Action event; messageId is in e.parameters.messageId.
+ * @return {ActionResponse}
+ */
+function deleteEmailAction(e) {
+  try {
+    var messageId =
+        (e.parameters && e.parameters.messageId) ||
+        (e.gmail && e.gmail.messageId);
+    if (!messageId) {
+      throw new Error('Missing messageId in action parameters.');
+    }
+    messageId = String(messageId);
+
+    if (e.gmail && e.gmail.accessToken) {
+      GmailApp.setCurrentMessageAccessToken(e.gmail.accessToken);
+    }
+
+    GmailApp.getMessageById(messageId).moveToTrash();
+
+    // Collapse add-on card stack back to root (Gmail may also refresh the open thread).
+    return CardService.newActionResponseBuilder()
+        .setNotification(
+            CardService.newNotification().setText(
+                'The email has been moved to trash successfully.'
+            )
+        )
+        .setNavigation(CardService.newNavigation().popToRoot())
+        .build();
+  } catch (err) {
+    return CardService.newActionResponseBuilder()
+        .setNotification(
+            CardService.newNotification().setText(
+                'Error moving email to trash: ' + err.toString()
+            )
+        )
+        .build();
+  }
 }
