@@ -9,10 +9,11 @@
 | Capability | Description |
 |------------|-------------|
 | **Phishing-oriented scoring** | Aggregates signals into a numeric score and labels: `safe`, `suspicious`, or `malicious`. |
-| **Domain spoofing detection** | Flags high-value brand names in the display name when the message does not originate from an expected domain (e.g. “PayPal” with a consumer mailbox domain). |
+| **Domain spoofing detection** | Expanded **brand-to-domain** coverage (payments, major tech, banks and cards, carriers, crypto, gov-style labels): **veto** when the display name implies a listed brand but the **From** address is not from that domain. **Generic bait phrases** (e.g. invoice, delivery, account alerts) combined with **consumer webmail** yield a **suspicious** (lower) score. The dictionary lives in code for now and is structured so it can move to **config or an external feed** in production. |
+| **Hidden link mismatch detection** | Inspects HTML hyperlinks: when visible anchor text suggests one domain (e.g. a trusted brand URL) but the **`href`** target resolves to a different host, the message is flagged as highly suspicious—addressing a common credential-phishing pattern. |
 | **URLHaus integration** | Enriches analysis by matching extracted URLs against an Abuse.ch URLHaus export (authenticated feed), maintaining a local in-memory set for fast lookups. |
 
-The add-on sends structured metadata (subject, sender, bodies, raw source) to **`POST /analyze`**; the backend runs all registered checks and returns JSON the UI can render.
+The add-on sends structured metadata (subject, sender, bodies, raw source, HTML body) to **`POST /analyze`**; the backend runs all registered checks and returns JSON the UI can render.
 
 ---
 
@@ -37,7 +38,7 @@ The add-on sends structured metadata (subject, sender, bodies, raw source) to **
 
 ### Manual registration fallback (cloud resilience)
 
-- If discovery registers **zero** checks (e.g. packaging or import edge cases in a container), the engine **explicitly** imports and instantiates **`DomainSpoofingCheck`** and **`URLHausCheck`**.  
+- If discovery registers **zero** checks (e.g. packaging or import edge cases in a container), the engine **explicitly** imports and instantiates **`DomainSpoofingCheck`**, **`URLHausCheck`**, and **`LinkMismatchCheck`**.  
 - **Why:** Production behavior stays predictable; reviewers can still see checks active via **`GET /health`** and **`GET /debug/checks`**.
 
 ### Why **Google Cloud Run**
@@ -151,7 +152,8 @@ pytest tests/ -v --ignore=tests/test_url_haus_live.py
 | Area | What it validates |
 |------|-------------------|
 | **Architecture** | Engine discovers checks; each check is a **`BaseCheck`** with required attributes. |
-| **Domain spoofing** | Malicious / suspicious / safe scenarios and scoring. |
+| **Domain spoofing** | Brand impersonation vetoes, webmail + generic-keyword **suspicious** path, and legitimate brand mail; see [`domain_spoofing_check.py`](src/security_shield/checks/domain_spoofing_check.py). |
+| **Hidden link mismatch** | Anchor text vs. **`href`** host alignment; safe and malicious HTML cases (including common formatting bypasses). |
 | **URLHaus (mock)** | Blacklist matching with **`requests-mock`**, no live malware URLs. |
 | **URLHaus (live)** | Optional; **`test_url_haus_live.py`** hits the real API—run only with care and real credentials. |
 
@@ -171,7 +173,7 @@ pytest tests/ -v --ignore=tests/test_url_haus_live.py
 ```
 src/security_shield/
   backend/          # Flask app, engine, BaseCheck
-  checks/           # Pluggable checks (domain spoofing, URLHaus, …)
+  checks/           # Pluggable checks (domain spoofing, link mismatch, URLHaus, …)
 gmail-addon/        # Apps Script sources and manifest
 tests/              # pytest suite
 Dockerfile          # Cloud Run container
